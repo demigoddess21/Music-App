@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Music App</string>
+    <string name="welcome_str">Hi! Add at least 2 of your favourite songs to create your own playlist!</string>
+    <string name="select_audio">Select Audio</string>
+</resources>
