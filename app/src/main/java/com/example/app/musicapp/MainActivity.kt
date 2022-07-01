@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 
             intent.type = "audio/mpeg"
             startActivityForResult(
@@ -57,6 +58,13 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_CODE_PICK_SOUNDFILE && resultCode == RESULT_OK) {
             if (data != null && data.clipData != null) {
+                val mediaPlayer = MediaPlayer()
+                mediaPlayer.setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
 
                 binding.welcomeTv.visibility = View.GONE
                 binding.selectAudioBtn.visibility = View.GONE
@@ -65,14 +73,15 @@ class MainActivity : AppCompatActivity() {
                 binding.rvPlaylist.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-                binding.rvPlaylist.adapter = PlaylistAdapter(data.clipData,this){
+                binding.rvPlaylist.adapter =
+                    PlaylistAdapter(data.clipData, this, mediaPlayer) { item, index ->
 
-                }
-                }
-
-
+                    }
             }
+
+
         }
+    }
 
 
 }
